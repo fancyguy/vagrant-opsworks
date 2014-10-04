@@ -1,6 +1,12 @@
 language: ruby
 rvm:
-  - 2.0.0
-  - 2.1.0
+- 2.0.0
+- 2.1.0
 bundler_args: --without doc guard --jobs 7
-script: 'bundle exec thor spec:ci'
+script: bundle exec thor spec:ci
+notifications:
+  hipchat:
+    rooms:
+      secure: C+gu4OY+FNhJPrm7HbNvn82C7VEU3G+BRSFeSRpZc6hfKkDOKghTLFlc1NjLKyPdFk6t4qSa4pptUwH9TP+ytImBqqM6BPD8eviO493j1bclXNnNxW+RytCpAwvQTcOVDalzBFvx/jA0uGpAuitBubgpmAhPHc9ddtOnKbEuxEM=
+    template:
+      - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}'
