@@ -1,0 +1,11 @@
+# -*- mode: ruby; encoding: utf-8 -*-
+source 'https://rubygems.org'
+
+group :development do
+  gem 'vagrant', github: 'mitchellh/vagrant', tag: 'v1.6.3'
+end
+
+group :plugins do
+  gem 'vagrant-opsworks', path: '../'
+  gem 'aws-sdk'
+end
