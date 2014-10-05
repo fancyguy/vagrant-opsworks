@@ -6,7 +6,39 @@ require 'bundler/setup'
 require 'thor/rake_compat'
 require 'vagrant-opsworks'
 
-GEM_PKG = "vagrant-opsworks-#{VagrantPlugin::OpsWorks::VERSION}.gem".freeze
+GEM_PKG = "vagrant-opsworks-#{VagrantPlugins::OpsWorks::VERSION}.gem".freeze
+
+class Vagrant < Thor
+  include Thor::Actions
+  default_task :command
+
+  desc 'command', "Runs a vagrant command"
+  def command(command='')
+    inside('integration') do
+      run "bundle exec vagrant #{command} --debug"
+    end
+  end
+
+  desc 'status', 'Runs vagrant status'
+  def status(*args)
+    invoke(:command, ["status #{args.join(' ')}"])
+  end
+
+  desc 'up', 'Runs vagrant up'
+  def up(*args)
+    invoke(:command, ["up #{args.join(' ')}"])
+  end
+
+  desc 'destroy', 'Runs vagrant destroy'
+  def destroy(*args)
+    invoke(:command, ["destroy -f  #{args.join(' ')}"])
+  end
+
+  desc 'provision', 'Runs vagrant provision'
+  def provision(*args)
+    invoke(:command, ["provision #{args.join(' ')}"])
+  end
+end
 
 class Gem < Thor
   include Thor::RakeCompat
@@ -17,7 +49,7 @@ class Gem < Thor
     Rake::Task['build'].execute
   end
 
-  desc 'release', "Create tag v#{VagrantPlugin::OpsWorks::VERSION} and build and push #{GEM_PKG} to Rubygems"
+  desc 'release', "Create tag v#{VagrantPlugins::OpsWorks::VERSION} and build and push #{GEM_PKG} to Rubygems"
   def release
     Rake::Task['release'].execute
   end
