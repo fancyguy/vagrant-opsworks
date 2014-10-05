@@ -3,8 +3,6 @@ require 'bundler/setup'
 require 'spork'
 
 Spork.prefork do
-  APP_ROOT = File.expand_path('../../', __FILE__)
-
   require 'rspec'
 
   RSpec.configure do |config|
