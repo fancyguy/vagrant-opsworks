@@ -1,7 +1,7 @@
 module VagrantPlugins
   module OpsWorks
     module Errors
-      class OpsWorksError < Vagrant::Errors::VagrantError
+      class OpsWorksError < ::Vagrant::Errors::VagrantError
         error_namespace('vagrant_opsworks.errors')
       end
 
