@@ -1,6 +1,6 @@
 en:
   vagrant_opsworks:
     errors:
-      connect: 'Failed to connect to OpsWorks API'
+      connect: "Failed to connect to OpsWorks API"
     config:
-      enabled: 'A value for opsworks.enabled can be true or false'
+      not_a_bool: "A value for %{config_key} can only be true or false, not type '%{value}'"
