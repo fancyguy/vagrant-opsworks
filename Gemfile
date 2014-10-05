@@ -1,7 +1,7 @@
 # -*- mode: ruby; encoding: utf-8 -*-
-source 'https://rubygens.org'
+source 'https://rubygems.org'
 
-gemspec
+gemspec :path => '.'
 
 group :development do
   gem 'vagrant', github: 'mitchellh/vagrant', tag: 'v1.6.3'
@@ -23,15 +23,15 @@ group :guard do
 
   require 'rbconfig'
 
-  if RbConfig::Config['target_os'] =~ /darwin/i
+  if RbConfig::CONFIG['target_os'] =~ /darwin/i
     gem 'growl', require: false
-    gem 'rbfsevent', require: false
+    gem 'rb-fsevent', require: false
 
     if `uname`.strip == 'Darwin' && `sw_vers -productVersion`.strip >= '10.8'
       gem 'terminal-notifier-guard', '~> 1.5.3', require: false
     end rescue Errno::ENOENT
 
-  elsif RbConfig::['target_os'] =~ /linux/i
+  elsif RbConfig::CONFIG['target_os'] =~ /linux/i
     gem 'libnotify', '~> 0.8.0', require:false
     gem 'rb-inotify', require: false
 
