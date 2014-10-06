@@ -39,15 +39,11 @@ module VagrantPlugins
               node.vm.hostname = "#{@hostname}#{@opsworks.hostname_suffix}"
               select_vmbox(node, @os)
 
-              # Fix ssh agent forwarding for sudo as a non privileged user
-              # TODO: incorporate the modified template to prevent $SSH_AUTH_SOCK from being reset
-              node.vm.provision :shell, inline: "DEBIAN_FRONTEND=noninteractive apt-get -qq install acl"
-              node.vm.provision :shell, inline: "setfacl -m u:deploy:rw $SSH_AUTH_SOCK && setfacl -m u:deploy:x $(dirname $SSH_AUTH_SOCK)", run: "always"
-
               node.vm.provision :shell, inline: "DEBIAN_FRONTEND=noninteractive apt-get -qq install #{packages.join(' ')}"
 
               node.vm.provision :chef_solo do |chef|
                 roles.each{|role| chef.add_role role }
+                chef.json = @opsworks.stack.custom_json
               end
             end
           }

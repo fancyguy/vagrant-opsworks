@@ -39,6 +39,21 @@ module VagrantPlugins
       end
 
       # @return [String]
+      def agent_version
+        config.agent_version unless config.nil?
+      end
+
+      # @return [String]
+      def agent_bucket
+        config.agent_bucket unless config.nil?
+      end
+
+      # @return [String]
+      def asset_bucket
+        config.asset_bucket unless config.nil?
+      end
+
+      # @return [String]
       def stack_id
         config.stack_id unless config.nil?
       end
@@ -61,6 +76,11 @@ module VagrantPlugins
       # @return [Array]
       def ignore_recipes
         config.ignore_recipes unless config.nil?
+      end
+
+      # @return [Array]
+      def supplimental_json
+        config.supplimental_json unless config.nil?
       end
 
       # @return [VagrantPlugins::OpsWorks::Stack::Stack]
