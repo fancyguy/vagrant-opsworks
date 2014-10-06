@@ -16,9 +16,20 @@ module VagrantPlugins
           @cookbooks_source = config[:cookbooks_source]
         end
 
+        # @return [Hash]
+        def custom_json
+          JSON.parse(@custom_json)
+        end
+
         def get_proc
           return Proc.new { |config|
             select_vmbox(config, @os)
+
+            config.vm.provision :shell, inline: File.read(VagrantPlugins::OpsWorks.source_root.join('provisioning/install-agent.sh'))
+
+            # config.vm.provision :chef_solo do |chef|
+            #   chef.json = custom_json
+            # end
           }
         end
 

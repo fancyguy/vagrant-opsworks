@@ -2,6 +2,7 @@ module VagrantPlugins
   module OpsWorks
     module Action
       require_relative 'env'
+      require_relative 'action/bootstrap_opsworks'
       require_relative 'action/create_roles'
       require_relative 'action/inject_boxes'
       require_relative 'action/setup_environment'
@@ -15,6 +16,7 @@ module VagrantPlugins
         def setup
           @setup ||= environment_builder.tap do |b|
             b.use VagrantPlugins::OpsWorks::Action::CreateRoles
+            b.use VagrantPlugins::OpsWorks::Action::BootstrapOpsWorks
           end
         end
 
