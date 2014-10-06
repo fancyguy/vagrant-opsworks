@@ -38,6 +38,11 @@ class Vagrant < Thor
   def provision(*args)
     invoke(:command, ["provision #{args.join(' ')}"])
   end
+
+  desc 'ssh', 'Runs vagrant ssh'
+  def ssh(*args)
+    invoke(:command, ["ssh #{args.join(' ')}"])
+  end
 end
 
 class Gem < Thor
