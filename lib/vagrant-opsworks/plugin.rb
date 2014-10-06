@@ -7,7 +7,7 @@ module VagrantPlugins
       description 'A Vagrant plugin to provision a stack configured in Amazon OpsWorks'
 
       action_hook(:opsworks_setup, :environment_load) do |hook|
-        hook.append(VagrantPlugins::OpsWorks::Action.set_boxes)
+        hook.append(VagrantPlugins::OpsWorks::Action.prepare_environment)
       end
 
       config(:opsworks) do

@@ -2,10 +2,18 @@ module VagrantPlugins
   module OpsWorks
     module Stack
       class Instance
+        # @return [String]
+        #   hostname of the instance
+        attr_reader :hostname
 
-        def initialize(stack, config)
-          @stack = stack
+        # @return [String]
+        #   operating system of the instance
+        attr_reader :os
+
+        def initialize(config)
           @hostname = config[:hostname]
+          @os = config[:os]
+          @layers = config[:layer_ids]
         end
 
         def get_proc
@@ -23,11 +31,9 @@ module VagrantPlugins
           case os
           when /^Ubuntu/
             version = os.split(' ')[1]
-            config.vm.box = "opscode_ubuntu-#{version}#{suffix}_chef-provisionerless"
-            config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-#{version}#{suffix}_chef-provisionerless.box"
+            config.vm.box = "chef/ubuntu-#{version}#{suffix}"
           else
-            config.vm.box = "opscode_centos-6.5#{suffix}_chef-provisionerless"
-            config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5#{suffix}_chef-provisionerless.box"
+            config.vm.box = "chef/centos-6.5#{suffix}"
           end
         end
       end

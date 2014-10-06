@@ -13,10 +13,14 @@ module VagrantPlugins
       #   OpsWorks stack id
       attr_accessor :stack_id
 
+      # @return [Array]
+      #   Instances to ignore in OpsWorks stack
+      attr_accessor :ignore_instances
+
       def initialize
         super
 
-        @cache            = false
+        @cache            = true
         @enabled          = UNSET_VALUE
         @stack_id         = UNSET_VALUE
         @ignore_instances = Array.new

@@ -1,5 +1,8 @@
 en:
   vagrant_opsworks:
+    environment:
+      cache_dir: "OpsWorks Cache Directory: %{cache_dir}"
+      stack_id: "OpsWorks Stack ID: %{stack_id}"
     errors:
       connect: "Failed to connect to OpsWorks API"
     config:
