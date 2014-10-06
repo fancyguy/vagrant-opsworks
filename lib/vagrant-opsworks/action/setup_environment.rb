@@ -8,20 +8,26 @@ module VagrantPlugins
         end
 
         def call(env)
-          config, _ = env[:env].config_loader.load([:home, :root])
+          if env.has_key?(:env)
+            config, _ = env[:env].config_loader.load([:home, :root])
+            environment = env[:env]
+          elsif env.has_key?(:machine)
+            config = env[:machine].config
+            environment = env[:machine].env
+          end
+
           env[:opsworks].config = config.opsworks
-          env[:opsworks].cache_directory = setup_cache_directory(env)
+          env[:opsworks].data_directory = setup_data_directory(environment, env[:opsworks])
 
           @app.call(env)
         end
 
         protected
 
-        def setup_cache_directory(env)
-          cache_dir = env[:env].local_data_path.join('opsworks')
-          cache_dir = cache_dir.join(env[:opsworks].stack_id) if env[:opsworks].stack_id
-          FileUtils.mkdir_p(cache_dir)
-          cache_dir
+        def setup_data_directory(environment, opsworks)
+          environment.local_data_path.join('opsworks').join(opsworks.stack_id).tap{|d|
+            FileUtils.mkdir_p(d.join('cache')) unless d.join('cache').file?
+          }
         end
 
       end

@@ -10,6 +10,16 @@ module VagrantPlugins
         @cache = cache
 
         %w(instances layers).each{ |m| @registry.register(m) { build_metadata_proc(m).call } }
+        @registry.register('stacks') {
+          api_proc = Proc.new {
+            unless opsworks_reachable?
+              raise VagrantPlugins::OpsWorks::Errors::ConnectError
+            end
+
+            aws_client.describe_stacks(stack_ids: [@stack_id])[:stacks]
+          }
+          build_api_proc('stacks', api_proc).call
+        }
       end
 
       def instances
@@ -18,6 +28,10 @@ module VagrantPlugins
 
       def layers
         @registry['layers']
+      end
+
+      def stack
+        @registry['stacks'].first
       end
 
       protected
@@ -29,14 +43,17 @@ module VagrantPlugins
 
       def build_metadata_proc(type)
         method = "describe_#{type}"
-        metadata_proc = Proc.new {
+        api_proc = Proc.new {
           unless opsworks_reachable?
             raise VagrantPlugins::OpsWorks::Errors::ConnectError
           end
 
           aws_client.send(method, stack_id: @stack_id)[type.to_sym]
         }
+        build_api_proc(type, api_proc)
+      end
 
+      def build_api_proc(type, metadata_proc)
         if @cache.is_a?(Pathname)
           unless File.directory?(@cache)
             FileUtils.mkdir_p(@cache)

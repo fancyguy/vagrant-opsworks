@@ -6,9 +6,19 @@ module VagrantPlugins
       name 'OpsWorks'
       description 'A Vagrant plugin to provision a stack configured in Amazon OpsWorks'
 
+      class << self
+        def provision(hook)
+          hook.before(::Vagrant::Action::Builtin::ConfigValidate, VagrantPlugins::OpsWorks::Action.setup)
+        end
+      end
+
       action_hook(:opsworks_setup, :environment_load) do |hook|
         hook.append(VagrantPlugins::OpsWorks::Action.prepare_environment)
       end
+
+      action_hook(:opsworks_provision, :machine_action_up, &method(:provision))
+      action_hook(:opsworks_provision, :machine_action_reload, &method(:provision))
+      action_hook(:opsworks_provision, :machine_action_provision, &method(:provision))
 
       config(:opsworks) do
         Config

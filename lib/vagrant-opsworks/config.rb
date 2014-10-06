@@ -13,23 +13,53 @@ module VagrantPlugins
       #   OpsWorks stack id
       attr_accessor :stack_id
 
+      # @return [String]
+      #   OpsWorks hostname suffix
+      attr_accessor :hostname_suffix
+
       # @return [Array]
       #   Instances to ignore in OpsWorks stack
       attr_accessor :ignore_instances
 
+      # @return [Array]
+      #   Layers to ignore in OpsWorks stack
+      attr_accessor :ignore_layers
+
+      # @return [Array]
+      #   Recipes to ignore in OpsWorks stack
+      attr_accessor :ignore_recipes
+
       def initialize
         super
 
-        @cache            = true
+        @cache            = UNSET_VALUE
         @enabled          = UNSET_VALUE
         @stack_id         = UNSET_VALUE
-        @ignore_instances = Array.new
-        @ignore_recipes   = Array.new
-        @ignore_layers    = Array.new
+        @hostname_suffix  = UNSET_VALUE
+        @ignore_instances = UNSET_VALUE
+        @ignore_layers    = UNSET_VALUE
+        @ignore_recipes   = UNSET_VALUE
       end
 
       def finalize!
-        @enabled = @stack_id == UNSET_VALUE ? false : true if @enabled == UNSET_VALUE
+        @cache            = true                                    if @cache            == UNSET_VALUE
+        @enabled          = @stack_id == UNSET_VALUE ? false : true if @enabled          == UNSET_VALUE
+        @hostname_suffix  = '.vm'                                   if @hostname_suffix  == UNSET_VALUE
+        @ignore_instances = Array.new                               if @ignore_instances == UNSET_VALUE
+        @ignore_layers    = Array.new                               if @ignore_layers    == UNSET_VALUE
+        @ignore_recipes   = Array.new                               if @ignore_recipes   == UNSET_VALUE
+      end
+
+      def merge(other)
+        super.tap do |result|
+          require 'pp'
+          result.ignore_instances = Array.new if other.ignore_instances.nil?
+          result.ignore_layers    = Array.new if other.ignore_layers.nil?
+          result.ignore_recipes   = Array.new if other.ignore_recipes.nil?
+          result.ignore_instances = @ignore_instances.concat(other.ignore_instances) if other.ignore_instances.is_a?(Array) && @ignore_instances != UNSET_VALUE
+          result.ignore_layers    = @ignore_layers.concat(other.ignore_layers)       if other.ignore_layers.is_a?(Array)    && @ignore_layers    != UNSET_VALUE
+          result.ignore_recipes   = @ignore_recipes.concat(other.ignore_recipes)     if other.ignore_recipes.is_a?(Array)   && @ignore_recipes   != UNSET_VALUE
+        end
       end
 
       def validate(machine)

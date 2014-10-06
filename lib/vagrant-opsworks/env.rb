@@ -7,7 +7,7 @@ module VagrantPlugins
       # @return [VagrantPlugins::OpsWorks::Config]
       attr_accessor :config
       # @return [Pathname]
-      attr_accessor :cache_directory
+      attr_accessor :data_directory
 
       def initialize
         @ui               = ::Vagrant::UI::Colored.new
@@ -35,32 +35,49 @@ module VagrantPlugins
 
       # @return [Pathname]
       def cache_directory
-        if cache_enabled?
-          @cache_directory
-        end
+        @data_directory.join('cache') if cache_enabled?
       end
 
       # @return [String]
       def stack_id
-        unless config.nil?
-          config.stack_id
-        end
+        config.stack_id unless config.nil?
+      end
+
+      # @return [String]
+      def hostname_suffix
+        config.hostname_suffix unless config.nil?
       end
 
       # @return [Array]
       def ignore_instances
-        unless config.nil?
-          config.ignore_instances
+        config.ignore_instances unless config.nil?
+      end
+
+      # @return [Array]
+      def ignore_layers
+        config.ignore_layers unless config.nil?
+      end
+
+      # @return [Array]
+      def ignore_recipes
+        config.ignore_recipes unless config.nil?
+      end
+
+      # @return [VagrantPlugins::OpsWorks::Stack::Stack]
+      def stack
+        if stack_id
+          VagrantPlugins::OpsWorks::Stack::Stack.new(self, client.stack)
         end
       end
 
+      # @return [Vagrant::Registry]
       def instances
         if stack_id
           instances = Vagrant::Registry.new
           client.instances.sort_by{|i| i[:hostname]}.each do |i|
             unless ignore_instances.include?(i[:hostname])
               instances.register(i[:hostname]) {
-                VagrantPlugins::OpsWorks::Stack::Instance.new(i)
+                VagrantPlugins::OpsWorks::Stack::Instance.new(self, i)
               }
             end
           end
@@ -68,8 +85,14 @@ module VagrantPlugins
         end
       end
 
+      # @return [Vagrant::Registry]
+      def layers
+        client.layers
+      end
+
       protected
 
+      # @return [VagrantPlugins::OpsWorks::Client]
       def client
         require_relative 'client'
         @client ||= Client.new(stack_id, cache_directory)
