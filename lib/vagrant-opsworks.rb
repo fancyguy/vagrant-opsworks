@@ -4,6 +4,8 @@ rescue LoadError
   raise 'The Vagrant OpsWorks plugin must be run within Vagrant.'
 end
 
+require 'berkshelf-monkey-patch'
+
 I18n.load_path << File.expand_path('../../locales/en.yml', __FILE__)
 
 require 'vagrant-opsworks/version'

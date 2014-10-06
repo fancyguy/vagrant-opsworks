@@ -8,6 +8,10 @@ module VagrantPlugins
 
       class << self
         def provision(hook)
+          require 'berkshelf/vagrant/env_helpers'
+          require 'berkshelf/vagrant/action/configure_chef'
+          hook.prepend(VagrantPlugins::OpsWorks::Action.configure_berks)
+
           hook.before(::Vagrant::Action::Builtin::ConfigValidate, VagrantPlugins::OpsWorks::Action.setup)
         end
       end

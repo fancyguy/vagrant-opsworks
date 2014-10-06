@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[[ -e "/opt/aws/opsworks" ]] && exit 0
+
 OPSWORKS_VERSION="327"
 OPSWORKS_AGENT_BUCKET="opsworks-instance-agent.s3.amazonaws.com"
 OPSWORKS_ASSETS_BUCKET="opsworks-instance-assets.s3.amazonaws.com"

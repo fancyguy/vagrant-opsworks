@@ -2,9 +2,12 @@ module VagrantPlugins
   module OpsWorks
     module Action
       require_relative 'env'
-      require_relative 'action/bootstrap_opsworks'
+      require_relative 'action/checkout_cookbooks'
+      require_relative 'action/configure_berks'
+      require_relative 'action/configure_chef'
       require_relative 'action/create_roles'
       require_relative 'action/inject_boxes'
+      require_relative 'action/merge_cookbooks'
       require_relative 'action/setup_environment'
       class << self
         def prepare_environment
@@ -16,7 +19,19 @@ module VagrantPlugins
         def setup
           @setup ||= environment_builder.tap do |b|
             b.use VagrantPlugins::OpsWorks::Action::CreateRoles
-            b.use VagrantPlugins::OpsWorks::Action::BootstrapOpsWorks
+            b.use VagrantPlugins::OpsWorks::Action::CheckoutCookbooks
+          end
+        end
+
+        def configure_berks
+          @configure_berks ||= environment_builder.tap do |b|
+            b.use VagrantPlugins::OpsWorks::Action::ConfigureBerks
+          end
+        end
+
+        def configure_chef
+          @configure_chef ||= environment_builder.tap do |b|
+            b.use VagrantPlugins::OpsWorks::Action::ConfigureChef
           end
         end
 
@@ -30,6 +45,7 @@ module VagrantPlugins
         end
 
       end
+
     end
   end
 end

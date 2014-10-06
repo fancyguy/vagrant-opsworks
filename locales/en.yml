@@ -1,9 +1,13 @@
 en:
   vagrant_opsworks:
+    action:
+      cookbooks:
+        checkout: "Checking out %{repo_name} from %{repo_url} with revision %{ref}..."
+    config:
+      not_a_bool: "A value for %{config_key} can only be true or false, not type '%{value}'"
     environment:
       cache_dir: "OpsWorks Cache Directory: %{cache_dir}"
       stack_id: "OpsWorks Stack ID: %{stack_id}"
     errors:
       connect: "Failed to connect to OpsWorks API"
-    config:
-      not_a_bool: "A value for %{config_key} can only be true or false, not type '%{value}'"
+

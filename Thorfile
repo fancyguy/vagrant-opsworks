@@ -31,7 +31,12 @@ class Vagrant < Thor
 
   desc 'destroy', 'Runs vagrant destroy'
   def destroy(*args)
-    invoke(:command, ["destroy -f  #{args.join(' ')}"])
+    invoke(:command, ["destroy -f #{args.join(' ')}"])
+  end
+
+  desc 'reload', 'Runs vagrant reload'
+  def reload(*args)
+    invoke(:command, ["reload --provision #{args.join(' ')}"])
   end
 
   desc 'provision', 'Runs vagrant provision'

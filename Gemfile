@@ -9,6 +9,7 @@ end
 
 group :plugins do
   gem 'vagrant-opsworks', path: '.'
+  gem 'vagrant-berkshelf', github: 'berkshelf/vagrant-berkshelf', tag: 'v3.0.1'
 end
 
 group :guard do
