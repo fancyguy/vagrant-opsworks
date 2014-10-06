@@ -1,5 +1,6 @@
 module VagrantPlugins
   module OpsWorks
+    require_relative 'stack'
     class Env
       # @return [Vagrant::UI::Colored]
       attr_accessor :ui
@@ -55,7 +56,6 @@ module VagrantPlugins
 
       def instances
         if stack_id
-          require_relative 'stack/instance'
           instances = Vagrant::Registry.new
           client.instances.sort_by{|i| i[:hostname]}.each do |i|
             unless ignore_instances.include?(i[:hostname])
