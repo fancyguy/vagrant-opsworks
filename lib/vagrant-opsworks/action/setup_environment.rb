@@ -25,7 +25,7 @@ module VagrantPlugins
         protected
 
         def setup_data_directory(environment, opsworks)
-          environment.local_data_path.join('opsworks').join(opsworks.stack_id).tap{|d|
+          environment.local_data_path.join("opsworks/#{opsworks.stack_id}").tap{|d|
             FileUtils.mkdir_p(d.join('cache')) unless d.join('cache').file?
           }
         end

@@ -19,7 +19,6 @@ module VagrantPlugins
         def setup
           @setup ||= environment_builder.tap do |b|
             b.use VagrantPlugins::OpsWorks::Action::CreateRoles
-            b.use VagrantPlugins::OpsWorks::Action::CheckoutCookbooks
           end
         end
 

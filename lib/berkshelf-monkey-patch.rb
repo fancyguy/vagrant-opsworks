@@ -15,6 +15,7 @@ module Berkshelf
         old_setup.tap do |b|
           b.use ::Vagrant::Action::Builtin::EnvSet, opsworks: VagrantPlugins::OpsWorks::Env.new
           b.use VagrantPlugins::OpsWorks::Action::SetupEnvironment
+          b.use VagrantPlugins::OpsWorks::Action::CheckoutCookbooks
           b.use VagrantPlugins::OpsWorks::Action::MergeCookbooks
           b.use VagrantPlugins::OpsWorks::Action::ConfigureChef
         end

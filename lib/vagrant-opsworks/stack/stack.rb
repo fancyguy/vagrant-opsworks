@@ -46,7 +46,7 @@ module VagrantPlugins
 
         # @return [Hash]
         def custom_json
-          merge_hash(JSON.parse(@custom_json), @opsworks.supplimental_json)
+          merge_hash(merge_hash({:deploy => @opsworks.apps}, JSON.parse(@custom_json)), @opsworks.supplimental_json)
         end
 
         def get_proc

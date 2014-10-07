@@ -9,7 +9,7 @@ module VagrantPlugins
         @registry = Vagrant::Registry.new
         @cache = cache
 
-        %w(instances layers).each{ |m| @registry.register(m) { build_metadata_proc(m).call } }
+        %w(apps instances layers).each{ |m| @registry.register(m) { build_metadata_proc(m).call } }
         @registry.register('stacks') {
           api_proc = Proc.new {
             unless opsworks_reachable?
@@ -20,6 +20,10 @@ module VagrantPlugins
           }
           build_api_proc('stacks', api_proc).call
         }
+      end
+
+      def apps
+        @registry['apps']
       end
 
       def instances

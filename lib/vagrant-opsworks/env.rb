@@ -64,6 +64,11 @@ module VagrantPlugins
       end
 
       # @return [Array]
+      def ignore_apps
+        config.ignore_apps unless config.nil?
+      end
+
+      # @return [Array]
       def ignore_instances
         config.ignore_instances unless config.nil?
       end
@@ -87,6 +92,41 @@ module VagrantPlugins
       def stack
         if stack_id
           VagrantPlugins::OpsWorks::Stack::Stack.new(self, client.stack)
+        end
+      end
+
+      # @return [Hash]
+      def apps
+        if stack_id
+          apps = {}
+          client.apps.each do |a|
+            unless ignore_apps.include?(a[:shortname])
+              app = {
+                :application => a[:shortname],
+                :application_type => a[:type],
+                :environment => a[:environment].nil? ? {} : Hash[a[:environment].select{|e| !e[:secure] }.map{|e| [e[:key], e[:value]]}],
+                :auto_bundle_on_deploy => a[:attributes]['AutoBundleOnDeploy'],
+                :deploying_user => Etc.getlogin,
+                :document_roos => a[:attributes]['DocumentRoot'],
+                :domains => a[:domains],
+                :database => {},
+                :memcached => { :host => nil, :port => 11211 },
+                :scm => {}
+              }
+              if a[:app_source][:type] == 'git'
+                app[:scm] = {
+                  :scm_type => 'git',
+                  :repository => a[:app_source][:url],
+                  :revision => a[:app_source][:revision],
+                  :ssh_key => nil,
+                  :user => nil,
+                  :password => nil
+                }
+              end
+              apps[a[:shortname]] = app
+            end
+          end
+          apps
         end
       end
 

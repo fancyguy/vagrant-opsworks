@@ -22,7 +22,9 @@ module VagrantPlugins
               :default_attributes => {
                 :opsworks => {
                   :layers => {
-                    l[:shortname] => {}
+                    l[:shortname] => {
+                      :instances => {}
+                    }
                   }
                 }
               },

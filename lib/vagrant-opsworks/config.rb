@@ -30,6 +30,10 @@ module VagrantPlugins
       attr_accessor :hostname_suffix
 
       # @return [Array]
+      #   Applications to ignore in OpsWorks stack
+      attr_accessor :ignore_apps
+
+      # @return [Array]
       #   Instances to ignore in OpsWorks stack
       attr_accessor :ignore_instances
 
@@ -54,6 +58,7 @@ module VagrantPlugins
         @enabled           = UNSET_VALUE
         @stack_id          = UNSET_VALUE
         @hostname_suffix   = UNSET_VALUE
+        @ignore_apps       = UNSET_VALUE
         @ignore_instances  = UNSET_VALUE
         @ignore_layers     = UNSET_VALUE
         @ignore_recipes    = UNSET_VALUE
@@ -67,6 +72,7 @@ module VagrantPlugins
         @cache             = true                                        if @cache             == UNSET_VALUE
         @enabled           = @stack_id == UNSET_VALUE ? false : true     if @enabled           == UNSET_VALUE
         @hostname_suffix   = '.vm'                                       if @hostname_suffix   == UNSET_VALUE
+        @ignore_apps       = Array.new                                   if @ignore_apps       == UNSET_VALUE
         @ignore_instances  = Array.new                                   if @ignore_instances  == UNSET_VALUE
         @ignore_layers     = Array.new                                   if @ignore_layers     == UNSET_VALUE
         @ignore_recipes    = Array.new                                   if @ignore_recipes    == UNSET_VALUE
@@ -74,6 +80,7 @@ module VagrantPlugins
         @supplimental_json = merge_hash({
                                           :opsworks => {
                                             :agent_version => @agent_version,
+                                            :ruby_version => '2.0.0',
                                             :ruby_stack => 'ruby',
                                             :stack => {
                                               :rds_instances => [{:engine => 'mysql'}]
@@ -94,6 +101,7 @@ module VagrantPlugins
       def merge(other)
         super.tap do |result|
           require 'pp'
+          result.ignore_apps       = Array.new if other.ignore_apps.nil?
           result.ignore_instances  = Array.new if other.ignore_instances.nil?
           result.ignore_layers     = Array.new if other.ignore_layers.nil?
           result.ignore_recipes    = Array.new if other.ignore_recipes.nil?
@@ -124,6 +132,9 @@ module VagrantPlugins
       protected
 
       def merge_hash(old, new)
+        old = unsymbolize_keys(old)
+        new = unsymbolize_keys(new)
+
         new.each_pair{|current_key,new_value|
           old_value = old[current_key]
 
@@ -134,6 +145,10 @@ module VagrantPlugins
                              end
         }
         old
+      end
+
+      def unsymbolize_keys(h)
+        return Hash[h.map{ |k,v| [k.to_s, v] }]
       end
 
     end
