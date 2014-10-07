@@ -98,19 +98,19 @@ module VagrantPlugins
       end
 
       # TODO: refactor hash merging logic to mixin
-      def merge(other)
-        super.tap do |result|
-          require 'pp'
-          result.ignore_apps       = Array.new if other.ignore_apps.nil?
-          result.ignore_instances  = Array.new if other.ignore_instances.nil?
-          result.ignore_layers     = Array.new if other.ignore_layers.nil?
-          result.ignore_recipes    = Array.new if other.ignore_recipes.nil?
-          result.ignore_instances  = @ignore_instances.concat(other.ignore_instances)        if other.ignore_instances.is_a?(Array) && @ignore_instances  != UNSET_VALUE
-          result.ignore_layers     = @ignore_layers.concat(other.ignore_layers)              if other.ignore_layers.is_a?(Array)    && @ignore_layers     != UNSET_VALUE
-          result.ignore_recipes    = @ignore_recipes.concat(other.ignore_recipes)            if other.ignore_recipes.is_a?(Array)   && @ignore_recipes    != UNSET_VALUE
-          result.supplimental_json = merge_hash(@supplimental_json, other.supplimental_json) if other.supplimental_json.is_a?(Hash) && @supplimental_json != UNSET_VALUE
-        end
-      end
+      # def merge(other)
+      #   super.tap do |result|
+      #     result.ignore_apps       = Array.new if other.ignore_apps.nil?
+      #     result.ignore_instances  = Array.new if other.ignore_instances.nil?
+      #     result.ignore_layers     = Array.new if other.ignore_layers.nil?
+      #     result.ignore_recipes    = Array.new if other.ignore_recipes.nil?
+      #     result.stack_id          = @stack_id                                               unless other.stack_id == UNSET_VALUE
+      #     result.ignore_instances  = @ignore_instances.concat(other.ignore_instances)        if other.ignore_instances.is_a?(Array) && @ignore_instances  != UNSET_VALUE
+      #     result.ignore_layers     = @ignore_layers.concat(other.ignore_layers)              if other.ignore_layers.is_a?(Array)    && @ignore_layers     != UNSET_VALUE
+      #     result.ignore_recipes    = @ignore_recipes.concat(other.ignore_recipes)            if other.ignore_recipes.is_a?(Array)   && @ignore_recipes    != UNSET_VALUE
+      #     result.supplimental_json = merge_hash(@supplimental_json, other.supplimental_json) if other.supplimental_json.is_a?(Hash) && @supplimental_json != UNSET_VALUE
+      #   end
+      # end
 
       def validate(machine)
         errors = Array.new

@@ -2,12 +2,14 @@ module VagrantPlugins
   module OpsWorks
     module Action
       class CreateRoles
+        include VagrantPlugins::OpsWorks::Util::EnvHelpers
+
         def initialize(app, env)
           @app = app
         end
 
         def call(env)
-          return @app.call(env) unless env[:opsworks].enabled?
+          return @app.call(env) unless enabled?(env)
 
           setup_role_directory(env[:opsworks])
 

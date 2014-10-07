@@ -2,13 +2,14 @@ module VagrantPlugins
   module OpsWorks
     module Action
       class ConfigureBerks
+        include VagrantPlugins::OpsWorks::Util::EnvHelpers
 
         def initialize(app, env)
           @app = app
         end
 
         def call(env)
-          return @app.call(env) unless env[:opsworks].enabled?
+          return @app.call(env) unless enabled?(env)
 
           if env[:opsworks].stack.berks_enabled?
             ENV['BERKSHELF_PATH'] = env[:opsworks].data_directory.join('berkshelf').to_s

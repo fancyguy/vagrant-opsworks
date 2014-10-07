@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'aws-sdk'
   s.add_dependency 'git'
+  s.add_dependency 'vagrant-berkshelf'
 
   s.add_development_dependency 'spork', '~> 0.9'
   s.add_development_dependency 'rspec', '~> 2.13'

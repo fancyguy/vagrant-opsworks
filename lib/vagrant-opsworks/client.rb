@@ -1,94 +1,46 @@
-module VagrantPlugins
-  module OpsWorks
-    class Client
+module VagrantPlugins::OpsWorks
+  class Client
+    require_relative 'util/dummy_configuration'
+    require_relative 'client/app'
+    require_relative 'client/instance'
+    require_relative 'client/layer'
+    require_relative 'client/stack'
 
-      attr_reader :stack_id
+    # @return [String]
+    attr_reader :stack_id
 
-      def initialize(stack_id, cache=nil)
-        @stack_id = stack_id
-        @registry = Vagrant::Registry.new
-        @cache = cache
-
-        %w(apps instances layers).each{ |m| @registry.register(m) { build_metadata_proc(m).call } }
-        @registry.register('stacks') {
-          api_proc = Proc.new {
-            unless opsworks_reachable?
-              raise VagrantPlugins::OpsWorks::Errors::ConnectError
-            end
-
-            aws_client.describe_stacks(stack_ids: [@stack_id])[:stacks]
-          }
-          build_api_proc('stacks', api_proc).call
-        }
-      end
-
-      def apps
-        @registry['apps']
-      end
-
-      def instances
-        @registry['instances']
-      end
-
-      def layers
-        @registry['layers']
-      end
-
-      def stack
-        @registry['stacks'].first
-      end
-
-      protected
-
-      def aws_client
-        require 'aws-sdk'
-        @client ||= AWS::OpsWorks::Client.new
-      end
-
-      def build_metadata_proc(type)
-        method = "describe_#{type}"
-        api_proc = Proc.new {
-          unless opsworks_reachable?
-            raise VagrantPlugins::OpsWorks::Errors::ConnectError
-          end
-
-          aws_client.send(method, stack_id: @stack_id)[type.to_sym]
-        }
-        build_api_proc(type, api_proc)
-      end
-
-      def build_api_proc(type, metadata_proc)
-        if @cache.is_a?(Pathname)
-          unless File.directory?(@cache)
-            FileUtils.mkdir_p(@cache)
-          end
-
-          api_proc = metadata_proc
-
-          metadata_proc = Proc.new {
-            cache_file = @cache.join(type)
-
-            if cache_file.file?
-              Marshal.load(File.read(cache_file))
-            else
-              data = api_proc.call
-              File.open(cache_file, 'w') {|f| f.puts Marshal.dump(data)}
-              data
-            end
-          }
-        end
-
-        metadata_proc
-      end
-
-      def opsworks_reachable?
-        require 'open-uri'
-        begin
-          true if open('https://opsworks.us-east-1.amazonaws.com', { read_timeout: 2 })
-        rescue
-          false
-        end
-      end
+    # @paran [String] stack_id the stack id to retrieve metadata about
+    def initialize(stack_id)
+      @stack_id = stack_id
     end
+
+    # @return [Array<App>]
+    def apps
+      @apps ||= aws_client.describe_apps(stack_id: @stack_id)[:apps].map{|a| App.new(a)}
+    end
+
+    # @return [Array<Instance>]
+    def instances
+      @instances ||= aws_client.describe_instances(stack_id: @stack_id)[:instances].map{|i| Instance.new(i)}
+    end
+
+    # @return [Array<Layer>]
+    def layers
+      @layers ||= aws_client.describe_layers(stack_id: @stack_id)[:layers].map{|l| Layer.new(l)}
+    end
+
+    # @return [Stack]
+    def stack
+      @stack ||= Stack.new(aws_client.describe_stacks(stack_ids: [@stack_id])[:stacks].first)
+    end
+
+    protected
+
+    # @return [AWS::OpsWorks::Client]
+    def aws_client
+      require 'aws-sdk'
+      @client ||= AWS::OpsWorks::Client.new
+    end
+
   end
 end

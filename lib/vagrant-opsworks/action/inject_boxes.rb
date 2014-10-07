@@ -2,17 +2,26 @@ module VagrantPlugins
   module OpsWorks
     module Action
       class InjectBoxes
+        include VagrantPlugins::OpsWorks::Util::EnvHelpers
 
         def initialize(app, env)
           @app = app
         end
 
         def call(env)
-          return @app.call(env) unless env[:opsworks].enabled?
+          return @app.call(env) unless enabled?(env)
+
+          require_relative '../loader'
+          require_relative '../util/configuration_builder'
 
           sources = [find_vagrantfile(env[:env])]
-          sources << ['2', env[:opsworks].stack.get_proc]
-          env[:opsworks].instances.each{|i,d| sources << ['2', d.get_proc]}
+
+          builder = VagrantPlugins::OpsWorks::Util::ConfigurationBuilder.new(env).tap{ |b|
+            b.use VagrantPlugins::OpsWorks::Loader::Stack
+            b.use VagrantPlugins::OpsWorks::Loader::Instances
+          }
+
+          sources << ['2', builder]
 
           env[:env].config_loader.set(:root, sources)
 

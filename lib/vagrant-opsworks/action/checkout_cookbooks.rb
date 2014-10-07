@@ -2,6 +2,7 @@ module VagrantPlugins
   module OpsWorks
     module Action
       class CheckoutCookbooks
+        include VagrantPlugins::OpsWorks::Util::EnvHelpers
         require 'git'
 
         def initialize(app, env)
@@ -9,7 +10,7 @@ module VagrantPlugins
         end
 
         def call(env)
-          return @app.call(env) unless env[:opsworks].enabled?
+          return @app.call(env) unless enabled?(env)
 
           setup_repo_directory(env)
 

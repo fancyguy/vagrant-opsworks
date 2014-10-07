@@ -2,11 +2,7 @@ module VagrantPlugins::OpsWorks::Util
   module EnvHelpers
 
     def enabled?(env)
-      config(env).opsworks.enabled?
-    end
-
-    def stack_id(env)
-      config(env).opsworks.stack_id
+      config(env).opsworks.enabled
     end
 
     def provisioners(name, env)

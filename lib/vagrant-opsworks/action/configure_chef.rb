@@ -2,15 +2,15 @@ module VagrantPlugins
   module OpsWorks
     module Action
       class ConfigureChef
-        require_relative '../env_helpers'
-        include VagrantPlugins::OpsWorks::EnvHelpers
+        require_relative '../util/env_helpers'
+        include VagrantPlugins::OpsWorks::Util::EnvHelpers
 
         def initialize(app, env)
           @app = app
         end
 
         def call(env)
-          return @app.call(env) unless env[:opsworks].enabled?
+          return @app.call(env) unless enabled?(env)
 
           if chef_solo?(env)
             provisioners(:chef_solo, env).each do |provisioner|

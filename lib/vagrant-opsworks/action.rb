@@ -1,6 +1,7 @@
 module VagrantPlugins
   module OpsWorks
     module Action
+      require_relative 'util/env_helpers'
       require_relative 'env'
       require_relative 'action/checkout_cookbooks'
       require_relative 'action/configure_berks'

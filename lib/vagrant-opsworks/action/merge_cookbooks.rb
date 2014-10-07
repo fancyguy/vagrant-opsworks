@@ -2,13 +2,14 @@ module VagrantPlugins
   module OpsWorks
     module Action
       class MergeCookbooks
+        include VagrantPlugins::OpsWorks::Util::EnvHelpers
 
         def initialize(app, env)
           @app = app
         end
 
         def call(env)
-          return @app.call(env) unless env[:opsworks].enabled?
+          return @app.call(env) unless enabled?(env)
 
           cookbook_path = env[:opsworks].data_directory.join('cookbooks').tap{|d| FileUtils.mkdir_p(d.join('merged')) unless d.join('merged').file? }
 
