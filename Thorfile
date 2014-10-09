@@ -8,48 +8,6 @@ require 'vagrant-opsworks'
 
 GEM_PKG = "vagrant-opsworks-#{VagrantPlugins::OpsWorks::VERSION}.gem".freeze
 
-class Vagrant < Thor
-  include Thor::Actions
-  default_task :command
-
-  desc 'command', "Runs a vagrant command"
-  def command(command='')
-    inside('integration') do
-      run "bundle exec vagrant #{command} --debug"
-    end
-  end
-
-  desc 'status', 'Runs vagrant status'
-  def status(*args)
-    invoke(:command, ["status #{args.join(' ')}"])
-  end
-
-  desc 'up', 'Runs vagrant up'
-  def up(*args)
-    invoke(:command, ["up #{args.join(' ')}"])
-  end
-
-  desc 'destroy', 'Runs vagrant destroy'
-  def destroy(*args)
-    invoke(:command, ["destroy -f #{args.join(' ')}"])
-  end
-
-  desc 'reload', 'Runs vagrant reload'
-  def reload(*args)
-    invoke(:command, ["reload --provision #{args.join(' ')}"])
-  end
-
-  desc 'provision', 'Runs vagrant provision'
-  def provision(*args)
-    invoke(:command, ["provision #{args.join(' ')}"])
-  end
-
-  desc 'ssh', 'Runs vagrant ssh'
-  def ssh(*args)
-    invoke(:command, ["ssh #{args.join(' ')}"])
-  end
-end
-
 class Gem < Thor
   include Thor::RakeCompat
   Bundler::GemHelper.install_tasks

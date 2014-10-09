@@ -30,4 +30,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'spork', '~> 0.9'
   s.add_development_dependency 'rspec', '~> 2.13'
   s.add_development_dependency 'thor', '~> 0.18'
+  s.add_development_dependency 'simplecov'
 end

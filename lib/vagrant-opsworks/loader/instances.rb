@@ -6,6 +6,10 @@ module VagrantPlugins::OpsWorks::Loader
     end
 
     def call(env)
+      require 'pp'
+      pp 'bar'
+      exit
+
       @app.call(env)
     end
 

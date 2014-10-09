@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'spork'
+require 'simplecov'
 
 Spork.prefork do
+  require 'simplecov' unless ENV['DRB']
   require 'rspec'
 
   RSpec.configure do |config|
@@ -15,5 +17,7 @@ Spork.prefork do
 end
 
 Spork.each_run do
+  require 'simplecov' if ENV['DRB']
+
   require 'vagrant-opsworks'
 end
