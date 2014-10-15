@@ -12,7 +12,7 @@ module Berkshelf
       end
 
       def self.setup
-        old_setup.tap do |b|
+        @setup ||= old_setup.tap do |b|
           b.use ::Vagrant::Action::Builtin::EnvSet, opsworks: VagrantPlugins::OpsWorks::Env.new
           b.use VagrantPlugins::OpsWorks::Action::SetupEnvironment
           b.use VagrantPlugins::OpsWorks::Action::CheckoutCookbooks
