@@ -8,6 +8,7 @@ module VagrantPlugins::OpsWorks::Util
       @opsworks = config
       @runner = ::Vagrant::Action::Runner.new({:action_name => :opsworks_configuration})
       @stack = []
+      @env = {}
     end
 
     def use(loader, *args, &block)
@@ -17,9 +18,13 @@ module VagrantPlugins::OpsWorks::Util
     end
 
     def call(config)
-      @stack.each do |loader|
-        @runner.run(@stack.shift, {:config => config})
-      end
+      @env.merge!({:config => config})
+      pass(@env)
+    end
+
+    def pass(env)
+      loader = @stack.shift
+      @runner.run(loader, env) if loader
     end
 
     def finalize_loader(klass, args, block)

@@ -17,31 +17,32 @@ module VagrantPlugins
 
           require 'pp'
           roles = {}
-          env[:opsworks].layers.each do |l|
-            roles[l[:shortname]] = {
-              :name => l[:shortname],
-              :description => l[:name],
-              :default_attributes => {
-                :opsworks => {
-                  :layers => {
-                    l[:shortname] => {
-                      :instances => {}
+          env[:opsworks].client.layers.each do |l|
+            next if opsworks_config(env).ignore_layers.include?(l['name'])
+            roles[l['name']] = {
+              'name' => l['name'],
+              'description' => l['description'],
+              'default_attributes' => {
+                'opsworks' => {
+                  'layers' => {
+                    l['name'] => {
+                      'instances' => {}
                     }
                   }
                 }
               },
-              :run_list => Hash[Array.new.tap { |a|
-                                  l[:default_recipes].each{ |k,v|
-                                    a << [k, v.concat(l[:custom_recipes][k])]
+              'run_list' => Hash[Array.new.tap { |a|
+                                  l['default_recipes'].each{ |k,v|
+                                    a << [k, v.concat(l['custom_recipes'][k])]
                                   }
                                 }].select{ |k,v|
                 %w(setup configure deploy).any?{ |s|
                   k.to_s == s
                 }
               }.values.flatten.select{ |r|
-                !env[:opsworks].ignore_recipes.include?(r)
+                !opsworks_config(env).ignore_recipes.include?(r)
               }
-            } unless env[:opsworks].ignore_layers.include?(l[:shortname])
+            }
           end
 
           roles.each do |role,data|

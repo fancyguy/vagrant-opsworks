@@ -14,21 +14,32 @@ module VagrantPlugins
 
           setup_repo_directory(env)
 
+          opsworks_cookbooks = {
+            :url => 'git@github.com:aws/opsworks-cookbooks.git',
+            :ref => "release-chef-#{env[:opsworks].client.stack.configuration_manager[:version]}"
+          }
+
           env[:opsworks].ui.info(I18n.t('vagrant_opsworks.action.cookbooks.checkout', {
                                           :repo_name => 'OpsWorks cookbooks',
-                                          :repo_url => env[:opsworks].stack.opsworks_cookbooks[:url],
-                                          :ref => env[:opsworks].stack.opsworks_cookbooks[:ref]
+                                          :repo_url  => opsworks_cookbooks[:url],
+                                          :ref => opsworks_cookbooks[:ref]
                                         }))
-          prepare_cookbooks(:opsworks, env[:opsworks].stack.opsworks_cookbooks)
+          prepare_cookbooks(:opsworks, opsworks_cookbooks)
 
-          if env[:opsworks].stack.custom_cookbooks?
-            if env[:opsworks].stack.custom_cookbooks[:type] == 'git'
+          if env[:opsworks].client.stack.custom_cookbooks?
+            custom_cookbooks = {
+              :type => 'git',
+              :url => env[:opsworks].client.stack.custom_cookbooks_source[:url],
+              :ref => env[:opsworks].client.stack.custom_cookbooks_source[:revision]
+            }
+
+            if env[:opsworks].client.stack.custom_cookbooks_source[:type] == 'git'
               env[:opsworks].ui.info(I18n.t('vagrant_opsworks.action.cookbooks.checkout', {
                                               :repo_name => 'custom cookbooks',
-                                              :repo_url => env[:opsworks].stack.custom_cookbooks[:url],
-                                              :ref => env[:opsworks].stack.custom_cookbooks[:ref]
+                                              :repo_url => custom_cookbooks[:url],
+                                              :ref => custom_cookbooks[:ref]
                                             }))
-              prepare_cookbooks(:custom, env[:opsworks].stack.custom_cookbooks)
+              prepare_cookbooks(:custom, custom_cookbooks)
             end
           end
 

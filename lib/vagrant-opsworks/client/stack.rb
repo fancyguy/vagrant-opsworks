@@ -14,6 +14,14 @@ module VagrantPlugins::OpsWorks
         set_or_return(:configuration_manager, value)
       end
 
+      def chef_configuration(value=nil)
+        set_or_return(:chef_configuration, value)
+      end
+
+      def berks_enabled?
+        return self['chef_configuration'][:manage_berkshelf]
+      end
+
       def use_custom_cookbooks?
         self['use_custom_cookbooks']
       end

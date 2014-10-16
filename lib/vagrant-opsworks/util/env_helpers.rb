@@ -2,7 +2,7 @@ module VagrantPlugins::OpsWorks::Util
   module EnvHelpers
 
     def enabled?(env)
-      config(env).opsworks.enabled
+      opsworks_config(env).enabled
     end
 
     def provisioners(name, env)
@@ -11,6 +11,14 @@ module VagrantPlugins::OpsWorks::Util
 
     def chef_solo?(env)
       provisioners(:chef_solo, env).any?
+    end
+
+    def stack_id(env)
+      opsworks_config(env).stack_id
+    end
+
+    def opsworks_config(env)
+      config(env).opsworks
     end
 
     protected

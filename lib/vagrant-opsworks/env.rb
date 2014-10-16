@@ -7,6 +7,8 @@ module VagrantPlugins
       # @return [Pathname]
       attr_accessor :data_directory
 
+      attr_accessor :client
+
       def initialize
         @ui               = ::Vagrant::UI::Colored.new
         @ui.opts[:target] = 'OpsWorks'

@@ -43,11 +43,13 @@ module VagrantPlugins
 
               node.vm.provision :chef_solo do |chef|
                 roles.each{|role| chef.add_role role }
+                #chef.add_recipe 'hadoop'
                 pkgs = packages.map{|x| [x, nil]}.to_h
                 custom_json = @opsworks.stack.custom_json
                 custom_json[:dependencies] = {} unless custom_json.has_key?(:dependencies)
                 custom_json[:dependencies][:debs] = {} unless custom_json[:dependencies].has_key?(:debs)
                 custom_json[:dependencies][:debs].merge!(pkgs)
+                custom_json[:deploy]['rc2010'][:scm][:revision] = 'master'
                 chef.json = custom_json
               end
             end

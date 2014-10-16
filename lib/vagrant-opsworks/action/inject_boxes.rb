@@ -18,6 +18,7 @@ module VagrantPlugins
 
           config, _ = env[:env].config_loader.load([:home,:root])
           builder = VagrantPlugins::OpsWorks::Util::ConfigurationBuilder.new(config.opsworks).tap{ |b|
+            b.use VagrantPlugins::OpsWorks::Loader::Client
             b.use VagrantPlugins::OpsWorks::Loader::Stack
             b.use VagrantPlugins::OpsWorks::Loader::Instances
           }

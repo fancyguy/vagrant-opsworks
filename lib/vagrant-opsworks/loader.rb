@@ -1,6 +1,7 @@
 module VagrantPlugins
   module OpsWorks
     module Loader
+      require_relative 'loader/client'
       require_relative 'loader/stack'
       require_relative 'loader/instances'
 
