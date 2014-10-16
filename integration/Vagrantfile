@@ -1,8 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+VAGRANTFILE_API_VERSION = "2"
+
 Vagrant.configure('2') do |config|
-  #config.opsworks.stack_id = 'd5936be4-a3cd-4629-9311-f75103e7c5c7'
-  config.opsworks.ignore_instances = ['aws-web02', 'aws-web03', 'aws-web04']
-  config.opsworks.ignore_recipes = ['route53::setup','deploy::composer']
+  config.vm.network :private_network, type: 'dhcp'
 end
