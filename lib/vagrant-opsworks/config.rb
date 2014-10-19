@@ -76,8 +76,8 @@ module VagrantPlugins
         @ignore_instances  = Array.new                                   if @ignore_instances  == UNSET_VALUE
         @ignore_layers     = Array.new                                   if @ignore_layers     == UNSET_VALUE
         @ignore_recipes    = Array.new                                   if @ignore_recipes    == UNSET_VALUE
-        @supplimental_json = Hash.new                                    if @supplimental_json == UNSET_VALUE
-        @supplimental_json = merge_hash({
+
+        default_json       = CustomJson.new({
                                           :opsworks => {
                                             :agent_version => @agent_version,
                                             :ruby_version => '2.0.0',
@@ -94,10 +94,13 @@ module VagrantPlugins
                                             },
                                           },
                                           :sudoers => [{:name => 'vagrant'}]
-                                        }, @supplimental_json)
+                                        })
+
+        @supplimental_json = default_json if @supplimental_json == UNSET_VALUE
+        @supplimental_json = default_json.deep_merge(@supplimental_json) unless @supplimental_json == UNSET_VALUE
       end
 
-      # TODO: refactor hash merging logic to mixin
+      # TODO: implement proper merge handling
       # def merge(other)
       #   super.tap do |result|
       #     result.ignore_apps       = Array.new if other.ignore_apps.nil?
@@ -127,28 +130,6 @@ module VagrantPlugins
         end
 
         {'opsworks configuration' => errors}
-      end
-
-      protected
-
-      def merge_hash(old, new)
-        old = unsymbolize_keys(old)
-        new = unsymbolize_keys(new)
-
-        new.each_pair{|current_key,new_value|
-          old_value = old[current_key]
-
-          old[current_key] = if old_value.is_a?(Hash) && new_value.is_a?(Hash)
-                               merge_hash(old_value, new_value)
-                             else
-                               new_value
-                             end
-        }
-        old
-      end
-
-      def unsymbolize_keys(h)
-        return Hash[h.map{ |k,v| [k.to_s, v] }]
       end
 
     end

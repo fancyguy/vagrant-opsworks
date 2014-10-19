@@ -17,7 +17,7 @@ module VagrantPlugins::OpsWorks::Loader
       end
 
       env[:config].vm.provision :shell do |s|
-        s.inline = "DEBIAN_FRONTEND=noninteractive apt-get -qq install acl &&setfacl -m o:rw $SSH_AUTH_SOCK && setfacl -m o:x $(dirname $SSH_AUTH_SOCK)"
+        s.inline = '[ -n "$SSH_AUTH_SOCK" ] && DEBIAN_FRONTEND=noninteractive apt-get -qq install acl && setfacl -m o:rw $SSH_AUTH_SOCK && setfacl -m o:x $(dirname $SSH_AUTH_SOCK)'
       end
 
       @app.pass(env)

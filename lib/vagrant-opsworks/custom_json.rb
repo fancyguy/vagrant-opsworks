@@ -2,6 +2,15 @@ module VagrantPlugins::OpsWorks
   require 'vagrant/util/hash_with_indifferent_access'
   class CustomJson < ::Vagrant::Util::HashWithIndifferentAccess
 
+    def initialize(hash={}, &block)
+      super(hash, &block)
+
+      self.each_pair do |k,v|
+        v = self.class.new(v) if v.is_a?(Hash)
+        self[k] = v
+      end
+    end
+
     def deep_merge(other_json, &block)
       dup.deep_merge!(other_json, &block)
     end
