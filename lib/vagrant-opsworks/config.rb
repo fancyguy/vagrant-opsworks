@@ -1,5 +1,7 @@
 module VagrantPlugins
   module OpsWorks
+    require_relative 'custom_json'
+
     class Config < ::Vagrant.plugin('2', :config)
       # @return [Boolean]
       #   disable use of OpsWorks in Vagrant
@@ -77,7 +79,7 @@ module VagrantPlugins
         @ignore_layers     = Array.new                                   if @ignore_layers     == UNSET_VALUE
         @ignore_recipes    = Array.new                                   if @ignore_recipes    == UNSET_VALUE
 
-        default_json       = CustomJson.new({
+        default_json       = VagrantPlugins::OpsWorks::CustomJson.new({
                                           :opsworks => {
                                             :agent_version => @agent_version,
                                             :ruby_version => '2.0.0',
