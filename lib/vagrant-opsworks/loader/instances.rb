@@ -61,7 +61,7 @@ module VagrantPlugins::OpsWorks::Loader
                 'deployment'    => SecureRandom.uuid
               },
               'dependencies' => {
-                'debs' => pkgs.flatten.map{|x| [x, nil]}.to_h
+                'debs' => Hash[pkgs.flatten.map{|x| [x, nil]}]
               },
               'deploy' => apps
             })
