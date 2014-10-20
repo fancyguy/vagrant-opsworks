@@ -5,7 +5,7 @@ before_install:
   - gem uninstall bundler --all --executables
   - gem install bundler --version '~> 1.5.2'
   - bundle --version
-bundler_args: --without=development
+bundler_args: --without=guard
 
 rvm: 2.0.0
 env:

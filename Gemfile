@@ -1,27 +1,24 @@
 # -*- mode: ruby; encoding: utf-8 -*-
 source 'https://rubygems.org'
 
-gemspec :path => '.'
-
-group :development do
-  gem 'vagrant', github: 'mitchellh/vagrant', ref: ENV.fetch('VAGRANT_VERSION', 'v1.6.5')
-end
+gem 'vagrant', github: 'mitchellh/vagrant', ref: ENV.fetch('VAGRANT_VERSION', 'v1.6.5')
 
 group :plugins do
-  gem 'vagrant-opsworks', path: '.'
+  gemspec :path => '.'
   gem 'vagrant-berkshelf', github: 'berkshelf/vagrant-berkshelf', ref: ENV.fetch('BERKSHELF_VERSION', 'v3.0.1')
 end
 
 group :testing do
   gem 'coveralls', require: false
+  gem 'rspec', '~> 3.1'
+  gem 'rspec-its', '~> 1.0'
+  gem 'tailor', '~> 1.4'
 end
 
 group :guard do
   gem 'coolline'
   gem 'fuubar'
-  gem 'guard', '>= 1.5.0'
   gem 'guard-rspec'
-  gem 'guard-spork'
   gem 'guard-yard'
   gem 'redcarpet'
   gem 'yard'
