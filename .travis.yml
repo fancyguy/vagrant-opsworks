@@ -6,6 +6,7 @@ before_install:
   - gem install bundler --version '~> 1.5.2'
   - bundle --version
 bundler_args: --without=guard
+script: bundle exec thor spec:ci
 
 rvm: 2.0.0
 env:
@@ -31,8 +32,6 @@ matrix:
   allow_failures:
     - env: VAGRANT_VERSION=master BERKSHELF_VERSION=v3.0.1
     - env: VAGRANT_VERSION=master BERKSHELF_VERSION=v3.0.0
-
-script: bundle exec thor spec:ci
 
 notifications:
   hipchat:
