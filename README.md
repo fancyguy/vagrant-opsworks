@@ -9,3 +9,19 @@
 [travis]: https://travis-ci.org/fancyguy/vagrant-opsworks
 
 A [Vagrant](http://www.vagrantup.com/) plugin that configures a multi vm environment based on a defined stack in [AWS OpsWorks](http://aws.amazon.com/opsworks/). This is helpful in rapidly spinning up a copy of a production environment without needing to maintain the configuration in multiple locations.
+
+## Quick start
+
+Install the plugin:
+
+```sh
+vagrant plugin install vagrant-opsworks
+```
+
+To enable Vagrant OpsWorks functionality you need to provide at the very least a stack id. You can find this in the AWS console when looking at the overview of your stack. Below `53ad4076-3f76-466e-8ca2-29ea1092cada` will be our example stack id.
+
+```ruby
+Vagrant.configure('2') do |config|
+  config.opsworks.stack_id = '53ad4076-3f76-466e-8ca2-29ea1092cada'
+end
+```
