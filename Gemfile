@@ -4,12 +4,16 @@ source 'https://rubygems.org'
 gemspec :path => '.'
 
 group :development do
-  gem 'vagrant', github: 'mitchellh/vagrant', tag: 'v1.6.3'
+  gem 'vagrant', github: 'mitchellh/vagrant', ref: ENV.fetch('VAGRANT_VERSION', 'v1.6.5')
 end
 
 group :plugins do
   gem 'vagrant-opsworks', path: '.'
-  gem 'vagrant-berkshelf', github: 'berkshelf/vagrant-berkshelf', tag: 'v3.0.1'
+  gem 'vagrant-berkshelf', github: 'berkshelf/vagrant-berkshelf', ref: ENV.fetch('BERKSHELF_VERSION', 'v3.0.1')
+end
+
+group :testing do
+  gem 'coveralls', require: false
 end
 
 group :guard do

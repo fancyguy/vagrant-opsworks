@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email         = ['steve@fancyguy.com']
   s.description   = %q{A Vagrant plugin to provision a stack configured in Amazon OpsWorks}
   s.summary       = s.description
-  s.homepage      = 'http://github.com/fancyguy/vagrant-opsworks.git'
+  s.homepage      = 'http://fancyguy.github.io/vagrant-opsworks'
   s.license       = 'MIT'
 
   s.files         = `git ls-files`.split($/)

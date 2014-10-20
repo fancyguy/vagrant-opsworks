@@ -1,8 +1,29 @@
 language: ruby
-rvm:
-- 2.0.0
-- 2.1.0
-bundler_args: --without doc guard --jobs 7
+
+before_install:
+  - rvm @global do gem uninstall bundler --all --executables
+  - gem uninstall bundler --all --executables
+  - gem install bundler --version '~> 1.5.2'
+  - bundle --version
+bundler_args: --without=development
+
+rvm: 2.0.0
+env:
+  - VAGRANT_VERSION=v1.6.5
+  - BERKSHELF_VERSION=v3.0.1
+
+matrix:
+  include:
+    - env: VAGRANT_VERSION=v1.5.4
+    - env: VAGRANT_VERSION=v1.4.3
+    - env: VAGRANT_VERSION=v1.3.5
+      rvm: 1.9.3
+    - env: VAGRANT_VERSION=v1.2.7
+      rvm: 1.9.3
+    - env: VAGRANT_VERSION=master
+  allow_failures:
+    - env: VAGRANT_VERSION=master
+
 script: bundle exec thor spec:ci
 notifications:
   hipchat:
