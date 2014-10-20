@@ -31,6 +31,8 @@ matrix:
     - env: VAGRANT_VERSION=master BERKSHELF_VERSION=v3.0.1
     - env: VAGRANT_VERSION=master BERKSHELF_VERSION=v3.0.0
 
+script: bundle exec thor spec:ci
+
 notifications:
   hipchat:
     rooms:
