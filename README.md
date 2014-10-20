@@ -10,6 +10,15 @@
 
 A [Vagrant](http://www.vagrantup.com/) plugin that configures a multi vm environment based on a defined stack in [AWS OpsWorks](http://aws.amazon.com/opsworks/). This is helpful in rapidly spinning up a copy of a production environment without needing to maintain the configuration in multiple locations.
 
+The plugin has only been built for and tested with a very specific configuration:
+
+| Setting                |            Value |
+|:---------------------- | ----------------:|
+| OS                     | Ubuntu 12.04 LTS |
+| Chef                   |            11.10 |
+| Custom Cookbook Source |              Git |
+| Berkshelf              |            3.1.1 |
+
 ## Quick start
 
 Install the plugin:
