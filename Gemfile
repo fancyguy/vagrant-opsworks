@@ -10,6 +10,7 @@ end
 
 group :testing do
   gem 'coveralls', require: false
+  gem 'rake'
   gem 'rspec', '~> 3.1'
   gem 'rspec-its', '~> 1.0'
   gem 'tailor', '~> 1.4'
