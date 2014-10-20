@@ -43,6 +43,11 @@ module VagrantPlugins::OpsWorks::Loader
         env[:config].vm.define i['hostname'] do |node|
           VagrantPlugins::OpsWorks::Loader.select_vmbox(env[:config], i['os'])
 
+          hostname = i['hostname']
+          hostname << @opsworks.hostname_suffix
+
+          node.vm.hostname = hostname
+
           node.vm.provision :chef_solo do |chef|
             pkgs = []
             i['layer_ids'].each do |l|
@@ -53,7 +58,8 @@ module VagrantPlugins::OpsWorks::Loader
             end
 
             custom_json = env[:client].stack.custom_json.dup
-            custom_json.merge!({
+            custom_json.deep_merge!(@opsworks.supplimental_json)
+            custom_json.deep_merge!({
               'opsworks' => {
                 'activity'      => 'setup',
                 'agent_version' => @opsworks.agent_version,
