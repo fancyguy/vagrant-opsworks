@@ -34,3 +34,7 @@ Vagrant.configure('2') do |config|
   config.opsworks.stack_id = '53ad4076-3f76-466e-8ca2-29ea1092cada'
 end
 ```
+
+## Compatibility
+
+This plugin has not been tested with versions of Vagrant older than 1.6.5 ([downloads](http://www.vagrantup.com/downloads)).
