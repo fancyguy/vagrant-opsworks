@@ -62,11 +62,10 @@ module VagrantPlugins
             g = Git.clone(settings[:url], type.to_s, :path => @repo_path)
           else
             g = Git.open(repo)
-            g.reset_hard
-            g.pull
           end
 
           g.checkout(settings[:ref])
+          g.pull(g.remotes.first, g.current_branch)
         end
 
       end
