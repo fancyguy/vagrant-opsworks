@@ -33,6 +33,8 @@ module VagrantPlugins
               :ref => env[:opsworks].client.stack.custom_cookbooks_source[:revision]
             }
 
+            custom_cookbooks.merge!(opsworks_config(env).custom_cookbooks_source) if opsworks_config(env).custom_cookbooks_source
+
             if env[:opsworks].client.stack.custom_cookbooks_source[:type] == 'git'
               env[:opsworks].ui.info(I18n.t('vagrant_opsworks.action.cookbooks.checkout', {
                                               :repo_name => 'custom cookbooks',

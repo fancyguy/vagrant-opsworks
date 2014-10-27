@@ -50,6 +50,9 @@ module VagrantPlugins
       # @return [Hash]
       attr_accessor :supplimental_json
 
+      # @return [Hash]
+      attr_accessor :custom_cookbooks_source
+
       def initialize
         super
 
