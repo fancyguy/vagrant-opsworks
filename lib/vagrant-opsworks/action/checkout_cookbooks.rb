@@ -62,6 +62,7 @@ module VagrantPlugins
             g = Git.clone(settings[:url], type.to_s, :path => @repo_path)
           else
             g = Git.open(repo)
+            g.reset_hard
             g.pull
           end
 
