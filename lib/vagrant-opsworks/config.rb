@@ -68,7 +68,7 @@ module VagrantPlugins
       end
 
       def finalize!
-        @agent_version     = "327"                                       if @agent_version     == UNSET_VALUE
+        @agent_version     = "328"                                       if @agent_version     == UNSET_VALUE
         @agent_bucket      = "opsworks-instance-agent.s3.amazonaws.com"  if @agent_bucket      == UNSET_VALUE
         @asset_bucket      = "opsworks-instance-assets.s3.amazonaws.com" if @asset_bucket      == UNSET_VALUE
         @cache             = true                                        if @cache             == UNSET_VALUE
