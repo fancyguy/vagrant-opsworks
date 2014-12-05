@@ -1,3 +1,4 @@
+require 'vagrant'
 require 'berkshelf-monkey-patch'
 
 I18n.load_path << File.expand_path('../../locales/en.yml', __FILE__)
