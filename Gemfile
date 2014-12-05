@@ -5,7 +5,7 @@ gem 'vagrant', github: 'mitchellh/vagrant', ref: ENV.fetch('VAGRANT_VERSION', 'v
 
 group :plugins do
   gemspec :path => '.'
-  gem 'vagrant-berkshelf', github: 'berkshelf/vagrant-berkshelf', ref: ENV.fetch('BERKSHELF_VERSION', 'v3.0.1')
+  gem 'vagrant-berkshelf', github: 'berkshelf/vagrant-berkshelf', ref: ENV.fetch('BERKSHELF_VERSION', 'v4.0.1')
 end
 
 group :testing do
