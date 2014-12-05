@@ -2,6 +2,7 @@
 $:.push File.expand_path('../lib', __FILE__)
 
 require 'bundler'
+require 'i18n'
 require 'bundler/setup'
 require 'thor/rake_compat'
 require 'vagrant-opsworks'
